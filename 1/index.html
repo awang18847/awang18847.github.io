@@ -20,7 +20,7 @@
         <div class="box">
             <h2>General Approach</h2>
             <p>
-                This project employs exhaustive search and image pyramids to align color channels effectively. Starting with simple translations to align small-sized images, the approach evolves to handle larger .tif files efficiently through multi-scale representations, enhancing alignment speed and precision.
+                I utilized the phase_cross_correlation function to help me define an error metric to compare and align two images. When it came to smaller ones, I first had a naive search within the full range to identify optimal values to shift by, but this did not fly for larger images. As a result, I employed a suggested multi-scale pyramid technique, which reduces the resolution of the image, and therefore also the work needed to be done. We make gradual estimates level by level, and slowly refine the search before finally yielding the final image. In order to improve accuracy in later stages, I started cropping images pre alignment to hopefully reduce the need to check for external unneeded edges.
             </p>
         </div>
     </div>
