@@ -10,15 +10,20 @@
     <header>
         <h1>Images of the Russian Empire: Colorizing the Prokudin-Gorskii photo collection</h1>
     </header>
-    <section>
-        <h2>Overview</h2>
-        <p>
-            The goal of this project is to colorize digitized Prokudin-Gorskii glass plate images using advanced image processing techniques. By extracting and aligning three color channel images (R, G, B), the project aims to reconstruct vibrant, artifact-free color images. Key challenges include alignment accuracy and efficiency, especially for high-resolution images.
-        </p>
-        <h2>General Approach</h2>
-        <p>
-            This project employs exhaustive search and image pyramids to align color channels effectively. Starting with simple translations to align small-sized images, the approach evolves to handle larger .tif files efficiently through multi-scale representations, enhancing alignment speed and precision.
-        </p>
+    <div class="content">
+        <div class="box">
+            <h2>Overview</h2>
+            <p>
+                The goal of this project is to colorize digitized Prokudin-Gorskii glass plate images using advanced image processing techniques. By extracting and aligning three color channel images (R, G, B), the project aims to reconstruct vibrant, artifact-free color images. Key challenges include alignment accuracy and efficiency, especially for high-resolution images.
+            </p>
+        </div>
+        <div class="box">
+            <h2>General Approach</h2>
+            <p>
+                This project employs exhaustive search and image pyramids to align color channels effectively. Starting with simple translations to align small-sized images, the approach evolves to handle larger .tif files efficiently through multi-scale representations, enhancing alignment speed and precision.
+            </p>
+        </div>
+    </div>
     </section>
         <div class="image-grid">
             <figure>
@@ -78,7 +83,7 @@
                 <figcaption>Tobolsk<br>Green: [-11, 2], Red: [-22, 3]</figcaption>
             </figure>
             <figure>
-                <img src="media/medviezh'ia_gora_out.jpg" alt="Medviezh’ia Gora">
+                <img src="media/medviezhia_gora_out.jpg" alt="Medviezh’ia Gora">
                 <figcaption>Medviezh’ia Gora<br>Green: [-89, 4], Red: [-125, 4]</figcaption>
             </figure>
             <figure>
@@ -94,7 +99,7 @@
 </body>
 </html>
 <style>
-    /* styles.css */
+/* styles.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -102,35 +107,35 @@ body {
     background: #f0f0f0;
     color: #333;
 }
-
-header, section, footer {
+header, footer {
     text-align: center;
     margin: 20px;
 }
-
-img {
-    width: auto; /* Keep width responsive */
-    max-width: 35%; /* Increase maximum width to 35% */
-    height: auto; /* Keep height responsive */
-    padding: 5px;
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+.content {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+.box {
+    width: 45%;
+}
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+figure {
+    width: 23%; /* Adjust for four images per row */
     margin: 10px;
-}
-
-table {
-    width: 100%;
-    table-layout: fixed;
-}
-
-td {
     text-align: center;
-    vertical-align: top;
-    padding: 10px;
 }
-
+img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+}
 figcaption {
-    font-size: 0.8em; /* Reduce the font size of the captions */
-    color: #666; /* Lighten the color for less emphasis */
+    font-size: 0.8em;
+    color: #666;
 }
 </style>
