@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <td><img src="media/train_out.jpg" alt="Train"><br>Green: [-92, -2], Red: [-175, 28]</td>
-                <td><img src="media/tobolsk.jpg" alt="Tobolsk"><br>Green: [-89, 4], Red: [-125, 4]</td>
+                <td><img src="media/tobolsk_out.jpg" alt="Tobolsk"><br>Green: [-89, 4], Red: [-125, 4]</td>
                 <td><img src="media/medviezh’ia_gora_out.jpg" alt="Medviezh’ia Gora"><br>Green: [-89, 4], Red: [-125, 4]</td>
                 <td><img src="media/na_ostrovie_kapri_out.jpg" alt="Na Ostrovie Kapri"><br>Green: [-85, -13], Red: [-159, -11]</td>
                 <td></td>
@@ -62,24 +62,29 @@ header, section, footer {
 }
 
 img {
-    width: auto; /* Adjust the width automatically */
-    max-width: 25%; /* Maximum width of 25% of its container */
-    height: auto; /* Adjust the height automatically */
-    padding: 5px; /* Padding around images */
-    border: 1px solid #ccc; /* Grey border around images */
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Slight shadow for depth */
-    margin: 10px; /* Margin around images */
+    width: auto; /* Keep width responsive */
+    max-width: 35%; /* Increase maximum width to 35% */
+    height: auto; /* Keep height responsive */
+    padding: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    margin: 10px;
 }
 
 table {
-    width: 100%; /* Table width to fill the container */
-    table-layout: fixed; /* Fixed layout for even spacing */
+    width: 100%;
+    table-layout: fixed;
 }
 
 td {
-    text-align: center; /* Center-align text within cells */
-    vertical-align: top; /* Align content to the top of the cell */
-    padding: 10px; /* Padding within cells */
+    text-align: center;
+    vertical-align: top;
+    padding: 10px;
+}
+
+figcaption {
+    font-size: 0.8em; /* Reduce the font size of the captions */
+    color: #666; /* Lighten the color for less emphasis */
 }
 
 </style>
