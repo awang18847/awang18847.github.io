@@ -321,20 +321,19 @@
                 <figcaption>Original Donkey</figcaption>
             </figure>
             <figure>
-                <img src="Media/Multires/tree.jpg" alt="Original Tree">
-                <figcaption>Original Tree</figcaption>
-            </figure>
-            <figure>
                 <img src="Media/Multires/donkey_stencil.jpg" alt="Donkey Stencil">
                 <figcaption>Donkey Stencil for Blending</figcaption>
             </figure>
             <figure>
-                <img src="Media/Multires/Donkey Tree.png" alt="Donkey Tree Result">
+                <img src="Media/Multires/tree.jpg" alt="Original Tree">
+                <figcaption>Original Tree</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/Donkey_tree.png" alt="Donkey Tree Result">
                 <figcaption>Blended Donkey and Tree</figcaption>
             </figure>
         </div>
         
-    
         <!-- Stacks and Blended Results -->
         <figure>
             <img src="Media/Multires/Donkey_stack.png" alt="Donkey Stack">
@@ -405,21 +404,20 @@ img {
 }
 
 .image-row figure {
-    margin: 5px;
-    flex-basis: 22%;
-    max-width: 250px;
+    margin: 10px;
+    flex-basis: 40%;
+    max-width: 500px;
     text-align: center;
 }
 
 @media (max-width: 768px) {
     .image-row {
-        flex-direction: row;
-        justify-content: space-around;
+        flex-direction: column;
     }
 
     .image-row figure {
-        flex-basis: 45%;
-        margin: 5px 0;
+        flex-basis: 100%;
+        margin: 10px 0;
     }
 }
 
