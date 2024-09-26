@@ -1,16 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Portfolio</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2: Fun with Filters and Frequencies</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to My CS180 Portfolio!</h1>
-    <a href="./1/index.html">Project 1</a>
+    <header>
+        <h1>Fun with Filters and Frequencies</h1>
+        <h2>CS180: Intro to Computer Vision and Computational Photography</h2>
+        <p>Due Date: 11:59pm on Monday, Sep 23, 2024</p>
+    </header>
+
+    <div class="content">
+        <div class="box">
+            <h2>Overview</h2>
+            <p>
+                The goal of this project is to explore the concepts of filters and frequency transformations in image processing. Through this project, we will use techniques such as finite difference operators, Gaussian filters, and hybrid image creation. We will also focus on sharpening and multiresolution blending to create visually interesting results.
+            </p>
+        </div>
+        
+        <!-- Part 1: Fun with Filters -->
+        <!-- Part 1.1: Finite Difference Operator -->
+        <div class="box">
+            <h2>Part 1.1: Finite Difference Operator</h2>
+            <p>
+                We begin with the basic finite difference operators in the x and y directions. Below is the progression of images from the original image, showing partial derivatives, several thresholding attempts, and the application of the Derivative of Gaussian filter.
+            </p>
+            
+            <!-- Original Image -->
+            <figure>
+                <img src="Media/Filters/cameraman.png" alt="Original Cameraman Image">
+                <figcaption>Original Cameraman Image</figcaption>
+            </figure>
+            
+             <!-- Naive Edges -->
+            <figure>
+                <img src="Media/Filters/Partial Finite.png" alt="Original Cameraman Image">
+                <figcaption>Partial Finite Derivatives</figcaption>
+            </figure>
+
+            <!-- Threshold Attempts -->
+            <div class="image-grid">
+                <figure>
+                    <img src="Media/Filters/Threshold_Attempts.png" alt="Threshold Attempts">
+                    <figcaption>From left to right: Thresholds at 10, 30, 50, 70, and 100</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media//Filters/Threshold final.png" alt="Final Threshold Image">
+                    <figcaption>Final Threshold at 45</figcaption>
+                </figure>
+            </div>
+
+            <!-- Blurred Images -->
+            <div class="image-grid">
+                <figure>
+                    <img src="Media/Filters/Blurred_Many.png" alt="Blurred Images">
+                    <figcaption>From left to right: Blurred Image, Blurred Partial X, Blurred Partial Y, Blurred Edge Image (Threshold 25)</figcaption>
+                </figure>
+            </div>
+            
+            
+            <!-- Derivative of Gaussian -->
+            <div class="image-grid">
+                <figure>
+                    <img src="Media/Filters/DoG.png" alt="DoG Filters">
+                    <figcaption>From left to right: DoG Filter in X, DoG Filter in Y, DoG Gradient Magnitude, DoG Edge Image (Threshold 25)</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 2: Fun with Frequencies -->
+        <div class="box">
+            <h2>Part 2: Fun with Frequencies</h2>
+            
+            <!-- Part 2.1: Image Sharpening -->
+            <h3>Part 2.1: Image Sharpening</h3>
+            <p>
+                Below is the process of sharpening an image using unsharp masking. This technique emphasizes the high-frequency components to make the image appear crisper.
+            </p>
+            <figure>
+                <img src="media/blurry_image.jpg" alt="Original Blurry Image">
+                <figcaption>Original Blurry Image</figcaption>
+            </figure>
+            <figure>
+                <img src="media/sharpened_image.jpg" alt="Sharpened Image">
+                <figcaption>Sharpened Image</figcaption>
+            </figure>
+
+            <!-- Part 2.2: Hybrid Images -->
+            <h3>Part 2.2: Hybrid Images</h3>
+            <p>
+                Hybrid images combine the low frequencies of one image with the high frequencies of another to create different perceptions based on viewing distance.
+            </p>
+            <figure>
+                <img src="media/hybrid_result.jpg" alt="Hybrid Image">
+                <figcaption>Hybrid Image Result</figcaption>
+            </figure>
+            <figure>
+                <img src="media/fourier_analysis.jpg" alt="Fourier Analysis">
+                <figcaption>Fourier Analysis of the Hybrid Image</figcaption>
+            </figure>
+
+            <!-- Part 2.3: Gaussian and Laplacian Stacks -->
+            <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
+            <p>
+                Here we create Gaussian and Laplacian stacks for multiresolution blending. The following images illustrate the stacks for the "Oraple" (orange + apple blend).
+            </p>
+            <figure>
+                <img src="media/oraple_stack.jpg" alt="Laplacian Stack of Oraple">
+                <figcaption>Laplacian Stack of Oraple</figcaption>
+            </figure>
+        </div>
+
+        <!-- Bells & Whistles -->
+        <div class="box">
+            <h2>Bells & Whistles</h2>
+            <p>
+                I enhanced the effects using color for both high and low-frequency components. The results highlight the different impact of colors in hybrid images and multiresolution blending.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Created by [Your Name] for CS180</p>
+    </footer>
 </body>
 </html>
