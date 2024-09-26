@@ -93,7 +93,7 @@
             
             <!-- Part 2.1: Image Sharpening -->
                 <p>
-                   To sharpen an image, we are looking to try and bring out the high frequency instances of the image. In effect. we blur the image using Gaussian Blur and afterwards subtract these values from the original image through the use of the addWeighted function
+                   To sharpen an image, we are looking to try and bring out the high frequency instances of the image. In effect. we blur the image using Gaussian Blur and afterwards subtract these values from the original image through the use of the addWeighted function. To see the effectiveness, I also opted to try a list of several different alpha values to show the differences/development of "sharpness"
                 </p>
     
                 <!-- Sharpening Taj and Chopper -->
@@ -112,7 +112,9 @@
                     <img src="Media/Sharpening/Sharpen_many.png" alt="Taj and Chopper Sharpened">
                     <figcaption>Taj and Chopper Sharpened with Alpha = 1.0, 3.0, 6.0</figcaption>
                 </figure>
-                
+                <p>
+                    Not only did we sharpen an image that wasn't clear, but also tested blurring an image ourselves then resharpened it. Ideally, our before and after should be the same, but as we see in effect, blurring the image adds a bit of unexpected noise. So resharpening it left us with lower quality than the original. 
+                </p>
                 <!-- Blurring and Re-sharpening Monster -->
                 <h4>Blurring and Re-sharpening Monster</h4>
                 <figure>
@@ -129,14 +131,16 @@
 
             <!-- Hybrid Images for Nutmeg and Derek -->
             <h4>Nutmeg and Derek</h4>
-            <figure>
-                <img src="Media/Hybrid/DerekPicture.jpg" alt="Derek">
-                <figcaption>Derek</figcaption>
-            </figure>
-            <figure>
-                <img src="Media/Hybrid/nutmeg.jpg" alt="Nutmeg">
-                <figcaption>Nutmeg</figcaption>
-            </figure>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/DerekPicture.jpg" alt="Derek">
+                    <figcaption>Derek</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/nutmeg.jpg" alt="Nutmeg">
+                    <figcaption>Nutmeg</figcaption>
+                </figure>
+            </div>
             <figure>
                 <img src="Media/Hybrid/nutderek.png" alt="NutDerek Hybrid">
                 <figcaption>NutDerek Hybrid</figcaption>
