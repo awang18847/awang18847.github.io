@@ -383,6 +383,30 @@ body {
         flex-basis: 100%;
         margin: 10px 0;
     }
+    .image-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.image-row figure {
+    margin: 0 5px;
+    flex-basis: 24%;
+    max-width: 240px;
+}
+
+@media (max-width: 768px) {
+    .image-row {
+        flex-direction: column;
+    }
+
+    .image-row figure {
+        flex-basis: 100%;
+        margin: 10px 0;
+    }
+}
+
 }
 
 </style>
