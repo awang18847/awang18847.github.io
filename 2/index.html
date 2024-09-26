@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project 2: Fun with Filters and Frequencies</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>Fun with Filters and Frequencies</h1>
-        <h2>CS180: Intro to Computer Vision and Computational Photography</h2>
     </header>
 
     <div class="content">
@@ -35,10 +33,12 @@
             </figure>
             
              <!-- Naive Edges -->
-            <figure>
-                <img src="Media/Filters/Partial_Finite.png" alt="Original Cameraman Image">
-                <figcaption>Partial Finite Derivatives</figcaption>
-            </figure>
+             <div class="image-grid">
+                <figure>
+                    <img src="Media/Filters/Partial_Finite.png" alt="Partial Finite Derivatives">
+                    <figcaption>Partial Finite Derivatives</figcaption>
+                </figure>
+            </div>
 
             <!-- Threshold Attempts -->
             <div class="image-grid">
@@ -308,3 +308,35 @@
     </footer>
 </body>
 </html>
+<style>
+body {
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+        }
+
+        .content {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        figure {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .image-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        img {
+            max-width: 200px;
+            height: auto;
+        }
+</style>
