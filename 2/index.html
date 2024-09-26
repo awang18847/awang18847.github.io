@@ -93,7 +93,7 @@
             
             <!-- Part 2.1: Image Sharpening -->
                 <p>
-                    Below we demonstrate the process of sharpening using unsharp masking with different alpha values on the Taj Mahal and Chopper images, followed by the blurring and subsequent re-sharpening of the Monster image.
+                   To sharpen an image, we are looking to try and bring out the high frequency instances of the image. In effect. we blur the image using Gaussian Blur and afterwards subtract these values from the original image through the use of the addWeighted function
                 </p>
     
                 <!-- Sharpening Taj and Chopper -->
@@ -111,10 +111,6 @@
                 
                 <!-- Blurring and Re-sharpening Monster -->
                 <h4>Blurring and Re-sharpening Monster</h4>
-                <figure>
-                    <img src="Media/Sharpening/monster.jpeg" alt="Original Monster">
-                    <figcaption>Original Monster</figcaption>
-                </figure>
                 <figure>
                     <img src="Media/Sharpening/Monster_blur.png" alt="Blurred and Resharpened Monster">
                     <figcaption>Monster: Blurred and Resharpened</figcaption>
