@@ -14,7 +14,7 @@
         <div class="box">
             <h2>Overview</h2>
             <p>
-                The goal of this project is to explore the concepts of filters and frequency transformations in image processing. Through this project, we will use techniques such as finite difference operators, Gaussian filters, and hybrid image creation. We will also focus on sharpening and multiresolution blending to create visually interesting results.
+                Our project scope explores different utilies of frequencies. It walks us through the process of filtering to find an image's edges, sharpening a blurry image, creating hybrid pictures, and ultimately using blending techniques to mix images together
             </p>
         </div>
         
@@ -23,36 +23,42 @@
         <div class="box">
             <h2>Part 1.1: Finite Difference Operator</h2>
             <p>
-                We begin with the basic finite difference operators in the x and y directions. Below is the progression of images from the original image, showing partial derivatives, several thresholding attempts, and the application of the Derivative of Gaussian filter.
+                We begin with the most basic ways to filter through an image. It is effectively utilizing the arrays [1, -1]T and [1, -1] that leaves what can be described as "complimentary remnants" after being convolved with the original image. Afterwards, we combined the gradient by using a simple magnitude formula to combine the two derivatives
             </p>
             
-            <!-- Original Image -->
-            <figure>
+             <!-- Original Image -->
+             <figure>
                 <img src="Media/Filters/cameraman.png" alt="Original Cameraman Image">
                 <figcaption>Original Cameraman Image</figcaption>
             </figure>
             
-             <!-- Naive Edges -->
-             <div class="image-grid">
+            <!-- Derivative Images -->
+            <div class="full-width">
                 <figure>
                     <img src="Media/Filters/Partial_Finite.png" alt="Partial Finite Derivatives">
                     <figcaption>Partial Finite Derivatives</figcaption>
                 </figure>
             </div>
 
-            <!-- Threshold Attempts -->
-            <div class="image-grid">
+            <!-- Threshold Tests -->
+            <div class="full-width">
                 <figure>
                     <img src="Media/Filters/Threshold_Attempts.png" alt="Threshold Attempts">
                     <figcaption>From left to right: Thresholds at 10, 30, 50, 70, and 100</figcaption>
                 </figure>
-                <figure>
-                    <img src="Media//Filters/Threshold_final.png" alt="Final Threshold Image">
-                    <figcaption>Final Threshold at 45</figcaption>
-                </figure>
             </div>
 
+            <!-- Final Threshold Image -->
+            <figure>
+                <img src="Media/Filters/Threshold_final.png" alt="Final Threshold Image">
+                <figcaption>Final Threshold at 45</figcaption>
+            </figure>
+
             <!-- Blurred Images -->
+            <figure>
+                <img src="Media/Filters/blur_cameraman.png" alt="Blurred Images">
+                <figcaption>Blurred Original</figcaption>
+            </figure>
             <div class="image-grid">
                 <figure>
                     <img src="Media/Filters/Blurred_Many.png" alt="Blurred Images">
@@ -323,20 +329,21 @@ body {
             max-width: 800px;
         }
 
-        figure {
-            display: inline-block;
+        .full-width {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .full-width figure {
+            flex: 1 1 20%; /* Adjust based on how many images per row */
             margin: 10px;
             text-align: center;
         }
 
-        .image-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
         img {
-            max-width: 200px;
+            max-width: 100%;
             height: auto;
         }
 </style>
