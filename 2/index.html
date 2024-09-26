@@ -389,26 +389,29 @@ img {
 
 .image-row {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
     margin-bottom: 20px;
 }
 
 .image-row figure {
-    margin: 0 5px;
-    flex-basis: 24%;
-    max-width: 240px;
+    margin: 5px;
+    flex-basis: 22%;
+    max-width: 250px;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
     .image-row {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: space-around;
     }
 
     .image-row figure {
-        flex-basis: 100%;
-        margin: 10px 0;
+        flex-basis: 45%;
+        margin: 5px 0;
     }
 }
+
 
 </style>
