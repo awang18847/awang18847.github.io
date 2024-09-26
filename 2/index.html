@@ -98,12 +98,16 @@
     
                 <!-- Sharpening Taj and Chopper -->
                 <h4>Sharpening Taj and Chopper with Different Alphas</h4>
-                <figure>
-                    <img src="Media/Sharpening/taj.jpg" alt="Original Taj">
-                    <figcaption>Original Taj</figcaption>
-                    <img src="Media/Sharpening/chopper.jpeg" alt="Original Chopper">
-                    <figcaption>Original Chopper</figcaption>
-                </figure>
+                <div class="image-row">
+                    <figure>
+                        <img src="Media/Sharpening/taj.jpg" alt="Original Taj">
+                        <figcaption>Original Taj</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="Media/Sharpening/chopper.jpeg" alt="Original Chopper">
+                        <figcaption>Original Chopper</figcaption>
+                    </figure>
+                </div>
                 <figure>
                     <img src="Media/Sharpening/Sharpen_many.png" alt="Taj and Chopper Sharpened">
                     <figcaption>Taj and Chopper Sharpened with Alpha = 1.0, 3.0, 6.0</figcaption>
@@ -348,4 +352,26 @@ body {
             max-width: 100%;
             height: auto;
         }
+        .image-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.image-row figure {
+    margin: 0 10px;
+    flex-basis: 50%; /* Adjusts the size to fit two images per row */
+}
+
+@media (max-width: 600px) {
+    .image-row {
+        flex-direction: column;
+    }
+
+    .image-row figure {
+        flex-basis: 100%;
+        margin: 10px 0;
+    }
+}
+
 </style>
