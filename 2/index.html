@@ -76,32 +76,132 @@
             <h2>Part 2: Fun with Frequencies</h2>
             
             <!-- Part 2.1: Image Sharpening -->
-            <h3>Part 2.1: Image Sharpening</h3>
-            <p>
-                Below is the process of sharpening an image using unsharp masking. This technique emphasizes the high-frequency components to make the image appear crisper.
-            </p>
-            <figure>
-                <img src="media/blurry_image.jpg" alt="Original Blurry Image">
-                <figcaption>Original Blurry Image</figcaption>
-            </figure>
-            <figure>
-                <img src="media/sharpened_image.jpg" alt="Sharpened Image">
-                <figcaption>Sharpened Image</figcaption>
-            </figure>
-
+            <div class="box">
+                <h2>Part 2: Fun with Frequencies</h2>
+                <h3>Part 2.1: Image Sharpening</h3>
+                <p>
+                    Below we demonstrate the process of sharpening using unsharp masking with different alpha values on the Taj Mahal and Chopper images, followed by the blurring and subsequent re-sharpening of the Monster image.
+                </p>
+    
+                <!-- Sharpening Taj and Chopper -->
+                <h4>Sharpening Taj and Chopper with Different Alphas</h4>
+                <figure>
+                    <img src="Media/Sharpening/taj.jpg" alt="Original Taj">
+                    <figcaption>Original Taj</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Sharpening/chopper.jpeg" alt="Original Chopper">
+                    <figcaption>Original Chopper</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Sharpening/Sharpen_many.png" alt="Taj and Chopper Sharpened">
+                    <figcaption>Taj and Chopper Sharpened with Alpha = 1.0, 3.0, 6.0</figcaption>
+                </figure>
+                
+                <!-- Blurring and Re-sharpening Monster -->
+                <h4>Blurring and Re-sharpening Monster</h4>
+                <figure>
+                    <img src="Media/Sharpening/monster.jpeg" alt="Original Monster">
+                    <figcaption>Original Monster</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Sharpening/Monster_blur.png" alt="Blurred and Resharpened Monster">
+                    <figcaption>Monster: Blurred and Resharpened</figcaption>
+                </figure>
+            </div>
+            
             <!-- Part 2.2: Hybrid Images -->
             <h3>Part 2.2: Hybrid Images</h3>
             <p>
-                Hybrid images combine the low frequencies of one image with the high frequencies of another to create different perceptions based on viewing distance.
+                This section demonstrates the creation of hybrid images by combining the high frequency of one image with the low frequency of another. Below are the results for different pairs of images.
             </p>
+
+            <!-- Hybrid Images for Nutmeg and Derek -->
+            <h4>Nutmeg and Derek</h4>
             <figure>
-                <img src="media/hybrid_result.jpg" alt="Hybrid Image">
-                <figcaption>Hybrid Image Result</figcaption>
+                <img src="media/DerekPicture.jpg" alt="Derek">
+                <figcaption>Derek</figcaption>
             </figure>
             <figure>
-                <img src="media/fourier_analysis.jpg" alt="Fourier Analysis">
-                <figcaption>Fourier Analysis of the Hybrid Image</figcaption>
+                <img src="media/nutmeg.jpg" alt="Nutmeg">
+                <figcaption>Nutmeg</figcaption>
             </figure>
+            <figure>
+                <img src="media/nutderek.png" alt="NutDerek Hybrid">
+                <figcaption>NutDerek Hybrid</figcaption>
+            </figure>
+            <figure>
+                <img src="media/None.png" alt="No Color Hybrid">
+                <figcaption>No Color Hybrid</figcaption>
+            </figure>
+            <figure>
+                <img src="media/low.png" alt="Low Frequency Image">
+                <figcaption>Low Frequency Nutmeg</figcaption>
+            </figure>
+            <figure>
+                <img src="media/High_color.png" alt="High Frequency Derek">
+                <figcaption>High Frequency Derek</figcaption>
+            </figure>
+
+            <!-- Hybrid Images for XPP and Pop -->
+            <h4>XPP and Pop</h4>
+            <figure>
+                <img src="media/xpp.jpg" alt="XPP">
+                <figcaption>XPP</figcaption>
+            </figure>
+            <figure>
+                <img src="media/pop.jpg" alt="Pop">
+                <figcaption>Pop</figcaption>
+            </figure>
+            <figure>
+                <img src="media/xppop.png" alt="XPPop Hybrid">
+                <figcaption>XPPop Hybrid</figcaption>
+            </figure>
+            <figure>
+                <img src="media/prison.png" alt="Prison Hybrid">
+                <figcaption>Prison Hybrid</figcaption>
+            </figure>
+
+            <!-- Hybrid Images for Gojo and Jogo -->
+            <h4>Gojo and Jogo</h4>
+            <figure>
+                <img src="media/gojo.jpg" alt="Gojo">
+                <figcaption>Gojo</figcaption>
+            </figure>
+            <figure>
+                <img src="media/jogo.jpg" alt="Jogo">
+                <figcaption>Jogo</figcaption>
+            </figure>
+            <figure>
+                <img src="media/GOJOJOGO.png" alt="GojoJogo Color Hybrid">
+                <figcaption>GojoJogo Color Hybrid</figcaption>
+            </figure>
+            <figure>
+                <img src="media/gojojogo_nocolor.png" alt="GojoJogo No Color Hybrid">
+                <figcaption>GojoJogo No Color Hybrid</figcaption>
+            </figure>
+            <!-- Fourier Transforms for Gojo and Jogo -->
+            <figure>
+                <img src="media/FT_Gojo.png" alt="FT Gojo">
+                <figcaption>Fourier Transform Gojo</figcaption>
+            </figure>
+            <figure>
+                <img src="media/FT_Jogo.png" alt="FT Jogo">
+                <figcaption>Fourier Transform Jogo</figcaption>
+            </figure>
+            <figure>
+                <img src="media/FT_High.png" alt="FT High Frequency">
+                <figcaption>Fourier Transform High Frequency</figcaption>
+            </figure>
+            <figure>
+                <img src="media/FT_Low.png" alt="FT Low Frequency">
+                <figcaption>Fourier Transform Low Frequency</figcaption>
+            </figure>
+            <figure>
+                <img src="media/FT_Hybrid.png" alt="FT Hybrid">
+                <figcaption>Fourier Transform Hybrid Image</figcaption>
+            </figure>
+        </div>
 
             <!-- Part 2.3: Gaussian and Laplacian Stacks -->
             <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
