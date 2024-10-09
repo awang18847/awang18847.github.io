@@ -117,7 +117,7 @@
         <div class="box">
             <h2>Part 1: Defining Correspondences</h2>
             <p>
-                To begin the morphing process, I needed to define pairs of corresponding points (keypoints) on both images. I used a student-provided labeling tool to select keypoints on my face and another person's face, ensuring consistent labeling and ordering.
+                To begin the morphing process, I needed to define pairs of corresponding points on both images. I used the provided labeling tool to select keypoints on my face and another person's face
             </p>
             <div class="image-row">
                 <figure>
@@ -130,7 +130,7 @@
                 </figure>
             </div>
             <p>
-                After selecting the keypoints, I computed a Delaunay triangulation on the midway shape to create a triangulation mesh that would be used for morphing.
+                After selecting the keypoints, I computed a Delaunay triangulation on the midway shape to create a triangulation that would be used for morphing.
             </p>
             <div class="image-row">
                 <figure>
@@ -160,7 +160,7 @@
         <div class="box">
             <h2>Part 3: The Morph Sequence</h2>
             <p>
-                Using the morphing function, I generated a sequence of images that gradually transform my face into Hanlin's face. This was achieved by varying the warp fraction and dissolve fraction parameters from 0 to 1 over 45 frames. The result is a smooth transition between the two faces.
+                Using the morphing function, I generated a sequence of images that gradually transform my face into Hanlin's face.
             </p>
             <div class="gif-container">
                 <img id="morphGif" src="Media/morph_sequence.gif" alt="Morph Sequence">
@@ -172,7 +172,7 @@
         <div class="box">
             <h2>Part 4: The "Mean Face" of a Population</h2>
             <p>
-                For this part, I used a dataset of faces with annotated keypoints to compute the average face shape of the population. I warped each face in the dataset to the average shape and then averaged the colors to create the mean face.
+                For this part, I used the provided Danish faces dataset to compute the average face shape of the population. I warped select faces in the dataset to the average shape.
             </p>
             <figure>
                 <img src="Media/warp_image_example.png" alt="Warped Faces to Average Shape">
@@ -206,10 +206,6 @@
             <p>
                 By extrapolating from the population mean, I created a caricature of my face. This was done by amplifying the difference between my facial features and the average facial features.
             </p>
-            <figure>
-                <img src="Media/Alan_caricature.png" alt="Alan's Caricature">
-                <figcaption>Alan's Caricature by Extrapolating from the Mean</figcaption>
-            </figure>
             <p>
                 Additionally, I explored gender morphing by transforming my face towards the average female face from the dataset. This involved morphing both the shape and appearance to achieve a realistic transformation.
             </p>
