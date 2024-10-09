@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2: Fun with Filters and Frequencies</title>
+</head>
+<body>
+    <header>
+        <h1>Fun with Filters and Frequencies</h1>
+    </header>
+
+    <div class="content">
+        <div class="box">
+            <h2>Overview</h2>
+            <p>
+                Our project scope explores different utilies of frequencies. It walks us through the process of filtering to find an image's edges, sharpening a blurry image, creating hybrid pictures, and ultimately using blending techniques to mix images together
+            </p>
+        </div>
+        
+        <!-- Part 1: Fun with Filters -->
+        <!-- Part 1.1: Finite Difference Operator -->
+        <div class="box">
+            <h2>Part 1.1: Finite Difference Operator</h2>
+            <p>
+                We begin with the most basic ways to filter through an image. It is effectively utilizing the arrays [1, -1]T and [1, -1] that leaves what can be described as "complimentary remnants" after being convolved with the original image. Afterwards, we combined the gradient by using a simple magnitude formula to combine the two derivatives
+            </p>
+            
+             <!-- Original Image -->
+             <figure>
+                <img src="Media/Filters/cameraman.png" alt="Original Cameraman Image">
+                <figcaption>Original Cameraman Image</figcaption>
+            </figure>
+            
+            <!-- Derivative Images -->
+            <div class="full-width">
+                <figure>
+                    <img src="Media/Filters/Partial_Finite.png" alt="Partial Finite Derivatives">
+                    <figcaption>Partial Finite Derivatives</figcaption>
+                </figure>
+            </div>
+
+            <p>
+                We have also tried binarizing the image according to many different thresholds to see which would be the best. In the end, my own judgement thought 45 was the best   
+            </p>
+
+            <!-- Threshold Tests -->
+            <div class="full-width">
+                <figure>
+                    <img src="Media/Filters/Threshold_Attempts.png" alt="Threshold Attempts">
+                    <figcaption>From left to right: Thresholds at 10, 30, 50, 70, and 100</figcaption>
+                </figure>
+            </div>
+
+            <!-- Final Threshold Image -->
+            <figure>
+                <img src="Media/Filters/Threshold_final.png" alt="Final Threshold Image">
+                <figcaption>Final Threshold at 45</figcaption>
+            </figure>
+
+            <!-- Blurred Images -->
+            <p>
+                Counterintuitively, it was found that it was more helpful to find a more accurate outline of the image when we blurred the image first. This allowed for more data to be gathered to create more complex lines    
+            </p>
+            <figure>
+                <img src="Media/Filters/blur_cameraman.png" alt="Blurred Images">
+                <figcaption>Blurred Original</figcaption>
+            </figure>
+            
+            <div class="full-width">
+                <figure>
+                    <img src="Media/Filters/Blurred_Many.png" alt="Blurred Images">
+                    <figcaption>From left to right: Blurred Image, Blurred Partial X, Blurred Partial Y, Blurred Edge Image (Threshold 25)</figcaption>
+                </figure>
+            </div>            
+            
+            <p>
+                Lastly, rather than the basic filter, we now use a gaussian partial, which ended up being the best image  
+            </p>
+
+            <!-- Derivative of Gaussian -->
+            <div class="full-width">
+                <figure>
+                    <img src="Media/Filters/DoG.png" alt="DoG Filters">
+                    <figcaption>From left to right: DoG Filter in X, DoG Filter in Y, DoG Gradient Magnitude, DoG Edge Image (Threshold 25)</figcaption>
+                </figure>
+            </div>      
+        </div>
+
+        <!-- Part 2: Fun with Frequencies -->
+        <div class="box">
+            <h2>Part 2: Fun with Frequencies</h2>
+            
+            <!-- Part 2.1: Image Sharpening -->
+                <p>
+                   To sharpen an image, we are looking to try and bring out the high frequency instances of the image. In effect. we blur the image using Gaussian Blur and afterwards subtract these values from the original image through the use of the addWeighted function. To see the effectiveness, I also opted to try a list of several different alpha values to show the differences/development of "sharpness"
+                </p>
+    
+                <!-- Sharpening Taj and Chopper -->
+                <h4>Sharpening Taj and Chopper with Different Alphas</h4>
+                <div class="image-row">
+                    <figure>
+                        <img src="Media/Sharpening/taj.jpg" alt="Original Taj">
+                        <figcaption>Original Taj</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="Media/Sharpening/chopper.jpeg" alt="Original Chopper">
+                        <figcaption>Original Chopper</figcaption>
+                    </figure>
+                </div>
+                <figure>
+                    <img src="Media/Sharpening/Sharpen_many.png" alt="Taj and Chopper Sharpened">
+                    <figcaption>Taj and Chopper Sharpened with Alpha = 1.0, 3.0, 6.0</figcaption>
+                </figure>
+                <p>
+                    Not only did we sharpen an image that wasn't clear, but also tested blurring an image ourselves then resharpened it. Ideally, our before and after should be the same, but as we see in effect, blurring the image adds a bit of unexpected noise. So resharpening it left us with lower quality than the original. 
+                </p>
+                <!-- Blurring and Re-sharpening Monster -->
+                <h4>Blurring and Re-sharpening Monster</h4>
+                <figure>
+                    <img src="Media/Sharpening/Monster_blur.png" alt="Blurred and Resharpened Monster">
+                    <figcaption>Monster: Blurred and Resharpened</figcaption>
+                </figure>
+            </div>
+
+            <!-- Part 2.2: Hybrid Images -->
+            <h3>Part 2.2: Hybrid Images</h3>
+            <p>
+                Here we are creating hybrid images. The process of which is to obtain the low and high frequency images, then try to overlay them atop of one another. The process of obtaining low and high frequency images is similar to what we have done in similar parts, and we aligned them using provided functions by the staff
+            </p>
+
+            <!-- Hybrid Images for Nutmeg and Derek -->
+            <h4>Nutmeg and Derek</h4>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/DerekPicture.jpg" alt="Derek">
+                    <figcaption>Derek</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/nutmeg.jpg" alt="Nutmeg">
+                    <figcaption>Nutmeg</figcaption>
+                </figure>
+            </div>
+
+            <p>
+                When creating hybrid images, I've tried a combination of which frequency has color or not. After a bit of testing, visually speaking I prefer the one with both having color the most. Though this is completely subjective.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/nutderek.png" alt="NutDerek Hybrid">
+                    <figcaption>Both Color Hybrid</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/None.png" alt="No Color Hybrid">
+                    <figcaption>No Color Hybrid</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/low.png" alt="Low Frequency Image">
+                    <figcaption>Low Frequency Hybrid</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/High_color.png" alt="High Frequency Derek">
+                    <figcaption>High Frequency Hybrid</figcaption>
+                </figure>
+            </div>
+
+            <!-- Hybrid Images for XPP and Pop -->
+            <h4>XPP and Popplio (Failure)</h4>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/xpp.jpg" alt="XPP">
+                    <figcaption>XPP</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/pop.jpg" alt="Pop">
+                    <figcaption>Poplio</figcaption>
+                </figure>
+            </div>
+
+            <p>
+                This attempt simply did not look as smooth as I would have desired. I think the Popplio's blocky shape and more pronounced colors contrasted the xpp a bit too much. I tried a different combination of having it be both the low and high frequency image, but neither seem to have worked that well. Even when shifting colors around. I put when neither had color becausem I thought it was an especially funny failure, but it simply didn't work well.
+            </p>
+
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/xppop.png" alt="XPPop Hybrid">
+                    <figcaption>XPPop Hybrid</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/prison.png" alt="Prison Hybrid">
+                    <figcaption>Prison Hybrid</figcaption>
+                </figure>
+            </div>
+
+            <!-- Hybrid Images for Gojo and Jogo -->
+            <h4>Gojo and Jogo</h4>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/gojo.jpg" alt="Gojo">
+                    <figcaption>Gojo</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/jogo.jpg" alt="Jogo">
+                    <figcaption>Jogo</figcaption>
+                </figure>
+            </div>
+            <p>
+                This one was my favorite. It really helped that the meme already put it in a similar format, so it seemed like not matter what combination I picked the image always turned out well. It was just a matter of lowering Gojo's frequency a lot because it was pretty sharp inherently compared to jogo. So many values jsut led to only gojo appearing.     
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/GOJOJOGO.png" alt="GojoJogo Color Hybrid">
+                    <figcaption>GojoJogo Color Hybrid</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/gojojogo_nocolor.png" alt="GojoJogo No Color Hybrid">
+                    <figcaption>GojoJogo No Color Hybrid</figcaption>
+                </figure>
+            </div>
+
+            <!-- Fourier Transforms for Gojo and Jogo -->
+            <p>
+                As such, we also showed the Fourier transformations of the low and high frequencies as well as their filtered versions
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/FT_Gojo.png" alt="FT Gojo">
+                    <figcaption>Fourier Transform Gojo</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/FT_Jogo.png" alt="FT Jogo">
+                    <figcaption>Fourier Transform Jogo</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/Hybrid/FT_High.png" alt="FT High Frequency">
+                    <figcaption>Fourier Transform High Frequency</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/FT_Low.png" alt="FT Low Frequency">
+                    <figcaption>Fourier Transform Low Frequency</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/Hybrid/FT_Hybrid.png" alt="FT Hybrid">
+                    <figcaption>Fourier Transform Hybrid Image</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 2.3: Gaussian and Laplacian Stacks -->
+        <h3>Part 2.3: Gaussian and Laplacian Stacks</h3>
+        <p>
+            This section showcases the Gaussian and Laplacian stacks used for multiresolution blending. Below are the representations of these stacks at various levels for a given image.
+        </p>
+
+        <!-- Displaying Stacks -->
+        <figure>
+            <img src="Media/Multires/Stacks.png" alt="Gaussian and Laplacian Stacks">
+            <figcaption>Gaussian and Laplacian Stacks of Apple</figcaption>
+        </figure>
+        <figure>
+            <img src="Media/Multires/Stacks_again.png" alt="Gaussian and Laplacian Stacks">
+            <figcaption>Gaussian and Laplacian Stacks of Orange</figcaption>
+        </figure>
+        <figure>
+            <img src="Media/Multires/apple_stack.png" alt="Apple Gaussian and Laplacian Stacks">
+        </figure>
+        <figure>
+            <img src="Media/Multires/orange_stack.png" alt="Orange Gaussian and Laplacian Stacks">
+        </figure>
+        <figure>
+            <img src="Media/Multires/blend_rec.png" alt="Blended Reconstruction">
+        </figure>
+
+
+    <!-- Part 2.4: Multiresolution Blending -->
+
+        <h3>Part 2.4: Multiresolution Blending (a.k.a. the Oraple)</h3>
+        <p>
+            The blending of images in this example leverages Gaussian and Laplacian stacks to create multiresolution images. First, Gaussian stacks are constructed for each input image, which progressively blur the image across multiple levels, maintaining the original image resolution. Using these Gaussian stacks, Laplacian stacks are then generated by subtracting each level of the Gaussian stack from the next finer level, which captures the detail lost between blurring steps, and finally, these multi-level details from one image are combined with the smoothed versions from another image to achieve a seamlessly blended result. This method allows for the integration of different spatial frequencies from each source image, ensuring a smooth transition across the combined image.
+        </p>
+
+        <!-- Displaying Blended Images -->
+        <div class="image-row">
+            <figure>
+                <img src="Media/Multires/apple.jpeg" alt="Apple">
+                <figcaption>Original Apple Image</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/orange.jpeg" alt="Orange">
+                <figcaption>Original Orange Image</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/Oraple.png" alt="Blended Oraple">
+                <figcaption>Blended Oraple Image</figcaption>
+            </figure>
+        </div>
+
+        <div class="image-row">
+            <figure>
+                <img src="Media/Multires/percept.jpg" alt="Perception Image">
+                <figcaption>Perception</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/rf01.jpg" alt="RF01">
+                <figcaption>RF01</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/Rackets.png" alt="Rackets Example">
+                <figcaption>My dream racket</figcaption>
+            </figure>
+        </div>
+        
+        
+    
+        <!-- Donkey Images and Blending -->
+        <div class="image-row">
+            <figure>
+                <img src="Media/Multires/donkey.jpg" alt="Original Donkey">
+                <figcaption>Original Donkey</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/donkey_stencil.jpg" alt="Donkey Stencil">
+                <figcaption>Donkey Stencil for Blending</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/tree.jpg" alt="Original Tree">
+                <figcaption>Original Tree</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/Multires/Donkey_tree.png" alt="Donkey Tree Result">
+                <figcaption>A Donkey Tree!</figcaption>
+            </figure>
+        </div>
+        
+        <!-- Stacks and Blended Results -->
+        <figure>
+            <img src="Media/Multires/Donkey_stack.png" alt="Donkey Stack">
+            <figcaption>Donkey Gaussian and Laplacian Stacks</figcaption>
+        </figure>
+        <figure>
+            <img src="Media/Multires/tree_stack.png" alt="Tree Stack">
+            <figcaption>Tree Gaussian and Laplacian Stacks</figcaption>
+        </figure>
+        <figure>
+            <img src="Media/Multires/donkey_blend_rec.png" alt="Donkey Blended Reconstruction">
+            <figcaption>Donkey Blended Reconstruction</figcaption>
+        </figure>
+    </div>
+
+    <footer>
+        <p>Created by Alan Wang for CS180</p>
+    </footer>
+</body>
+</html>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+    color: #333;
+}
+
+header, footer {
+    background: #004d40;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    margin: 0.5em 0;
+}
+
+.content {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.box {
+    margin-bottom: 20px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+figure {
+    margin: 10px 0;
+}
+
+figcaption {
+    text-align: center;
+    font-style: italic;
+    font-size: smaller;
+}
+
+.image-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.image-row figure {
+    flex-basis: 48%;
+    margin: 10px 1%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .image-row figure {
+        flex-basis: 100%;
+        margin: 10px 0;
+    }
+}
+
+</style>
