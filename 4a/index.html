@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 4: Image Mosaicing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        header, footer {
+            background: #004d40;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0.5em 0;
+        }
+
+        .content {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .box {
+            margin-bottom: 40px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figure {
+            margin: 10px 0;
+        }
+
+        figcaption {
+            text-align: center;
+            font-style: italic;
+            font-size: smaller;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .image-row figure {
+            flex-basis: 30%;
+            margin: 10px 1%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .image-row figure {
+                flex-basis: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        .code-block {
+            background: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        .math {
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Image Mosaicing</h1>
+    </header>
+
+    <div class="content">
+        <!-- Overview -->
+        <div class="box">
+            <h2>Overview</h2>
+            <p>
+                The goal of this project was to delve into various aspects of image warping by creating image mosaics. By taking two or more photographs and stitching them together, I explored techniques such as recovering homographies, projective warping, resampling, and compositing images. This involved computing homographies and using them to warp images into alignment, ultimately blending them to create seamless mosaics.
+            </p>
+        </div>
+
+        <!-- Shoot the Pictures -->
+        <div class="box">
+            <h2>Shooting the Pictures</h2>
+            <p>
+                I captured three pairs of images with significant overlap from different angles to ensure the transforms between them are projective. The pairs include images of McDonald's, Soda Hall, and my room.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/mc_1.png" alt="McDonald's Image 1">
+                    <figcaption>McDonald's Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/mc_2.png" alt="McDonald's Image 2">
+                    <figcaption>McDonald's Image 2</figcaption>
+                </figure>
+            </div>
+            <p class="math">Two different angles of McDonald's.</p>
+
+            <div class="image-row">
+                <figure>
+                    <img src="Media/soda_1.png" alt="Soda Hall Image 1">
+                    <figcaption>Soda Hall Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/soda_2.png" alt="Soda Hall Image 2">
+                    <figcaption>Soda Hall Image 2</figcaption>
+                </figure>
+            </div>
+            <p class="math">Two different angles of Soda Hall.</p>
+
+            <div class="image-row">
+                <figure>
+                    <img src="Media/room_1.png" alt="Room Image 1">
+                    <figcaption>Room Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/room_2.png" alt="Room Image 2">
+                    <figcaption>Room Image 2</figcaption>
+                </figure>
+            </div>
+            <p class="math">Two different angles of my room.</p>
+        </div>
+
+        <!-- Recover Homographies -->
+        <div class="box">
+            <h2>Recovering Homographies</h2>
+            <p>
+                To align the images, I needed to compute the homography matrix <em>H</em> that maps points from one image to corresponding points in another. Given a set of corresponding points between two images, the goal is to find <em>H</em> such that:
+            </p>
+            <p class="math">
+                \( \begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = H \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} \)
+            </p>
+            <p>
+                Where \((x, y)\) are points in the first image, and \((x', y')\) are the corresponding points in the second image.
+            </p>
+            <p>
+                The homography matrix <em>H</em> has 8 degrees of freedom (since it's a 3x3 matrix defined up to scale). To solve for <em>H</em>, I set up a system of linear equations using the correspondences:
+            </p>
+            <p class="math">
+                \[
+                \begin{cases}
+                x' = \frac{h_{11} x + h_{12} y + h_{13}}{h_{31} x + h_{32} y + h_{33}} \\
+                y' = \frac{h_{21} x + h_{22} y + h_{23}}{h_{31} x + h_{32} y + h_{33}}
+                \end{cases}
+                \]
+            </p>
+            <p>
+                Multiplying both sides to eliminate denominators and rearranging, we get linear equations in terms of the elements of <em>H</em>. By stacking these equations for all correspondences, we form a system \( A \mathbf{h} = \mathbf{0} \), where \(\mathbf{h}\) is a vector of the unknowns. This system is solved using Singular Value Decomposition (SVD), where the solution corresponds to the singular vector associated with the smallest singular value.
+            </p>
+            <div class="code-block">
+<pre>
+def computeH(im1_pts, im2_pts):
+    A = []
+    for i in range(len(im1_pts)):
+        x, y = im1_pts[i]
+        x_prime, y_prime = im2_pts[i]
+        A.append([-x, -y, -1, 0, 0, 0, x_prime*x, x_prime*y, x_prime])
+        A.append([0, 0, 0, -x, -y, -1, y_prime*x, y_prime*y, y_prime])
+    A = np.array(A)
+    U, S, Vt = np.linalg.svd(A)
+    H = Vt[-1].reshape(3, 3)
+    return H / H[2, 2]
+</pre>
+            </div>
+            <p>
+                This function computes the homography matrix by assembling the matrix <em>A</em> using the correspondences, performing SVD, and extracting the last column of <em>V</em> (from <em>V<sup>T</sup></em>) corresponding to the smallest singular value.
+            </p>
+        </div>
+
+        <!-- Warping Images -->
+        <div class="box">
+            <h2>Warping Images</h2>
+            <p>
+                With the homography matrix computed, I warped one image onto the plane of the other using inverse warping. This involves mapping pixels from the output image back to the input image to avoid holes and ensure proper sampling.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/soda_correspondence_1.png" alt="Soda Hall Correspondences 1">
+                    <figcaption>Soda Hall Correspondences 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/soda_correspondence_2.png" alt="Soda Hall Correspondences 2">
+                    <figcaption>Soda Hall Correspondences 2</figcaption>
+                </figure>
+            </div>
+            <p>
+                After selecting corresponding points (as shown above), I warped each image onto the other's plane.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/warp1.png" alt="Warped Soda Hall Image 1 onto Image 2">
+                    <figcaption>Warped Soda Hall Image 1 onto Image 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/warp2.png" alt="Warped Soda Hall Image 2 onto Image 1">
+                    <figcaption>Warped Soda Hall Image 2 onto Image 1</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Image Rectification -->
+        <div class="box">
+            <h2>Image Rectification</h2>
+            <p>
+                Image rectification involves warping an image so that a selected planar surface is frontal-parallel, correcting for perspective distortion. By specifying correspondences between the corners of a planar object in the image and a rectangle, I computed the homography to perform rectification.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/winter.png" alt="Original Winter Image">
+                    <figcaption>Original Winter Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/winter_rectified.png" alt="Rectified Winter Image">
+                    <figcaption>Rectified Winter Image</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/gundam.png" alt="Original Gundam Image">
+                    <figcaption>Original Gundam Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/gundam_rectified.png" alt="Rectified Gundam Image">
+                    <figcaption>Rectified Gundam Image</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Blending Images into a Mosaic -->
+        <div class="box">
+            <h2>Blending Images to Create Mosaics</h2>
+            <p>
+                After warping images into the same plane, the next step was to blend them seamlessly into a mosaic. I used weighted averaging with an alpha mask to smooth the transitions between images. By calculating the distance transform from the edges of each image, I assigned higher weights to pixels near the center and lower weights near the edges.
+            </p>
+            <p>
+                The blending process involved creating low-pass and high-pass filtered versions of the images and combining them using the calculated weights. This approach minimizes artifacts and ensures a smooth blend between overlapping regions.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/mc_1.png" alt="McDonald's Image 1">
+                    <figcaption>McDonald's Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/mc_2.png" alt="McDonald's Image 2">
+                    <figcaption>McDonald's Image 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/mc_mosaic.png" alt="McDonald's Mosaic">
+                    <figcaption>McDonald's Mosaic</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/soda_1.png" alt="Soda Hall Image 1">
+                    <figcaption>Soda Hall Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/soda_2.png" alt="Soda Hall Image 2">
+                    <figcaption>Soda Hall Image 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/soda_mosaic.png" alt="Soda Hall Mosaic">
+                    <figcaption>Soda Hall Mosaic</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="Media/room_1.png" alt="Room Image 1">
+                    <figcaption>Room Image 1</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/room_2.png" alt="Room Image 2">
+                    <figcaption>Room Image 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="Media/room_mosaic.png" alt="Room Mosaic">
+                    <figcaption>Room Mosaic</figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Created by Alan Wang for CS194-26 Project 4</p>
+    </footer>
+</body>
+</html>
