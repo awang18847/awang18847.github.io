@@ -173,25 +173,6 @@
             <p>
                 By stacking these equations for all correspondences, we form a system A * h = 0, where h is a vector containing the unknown elements of <em>H</em>. This system is homogeneous and can be solved using Singular Value Decomposition (SVD). The solution corresponds to the right singular vector associated with the smallest singular value of A.
             </p>
-            <div class="code-block">
-<pre>
-def computeH(im1_pts, im2_pts):
-    A = []
-    for i in range(len(im1_pts)):
-        x, y = im1_pts[i]
-        x_prime, y_prime = im2_pts[i]
-        A.append([-x, -y, -1, 0, 0, 0, x_prime*x, x_prime*y, x_prime])
-        A.append([0, 0, 0, -x, -y, -1, y_prime*x, y_prime*y, y_prime])
-    A = np.array(A)
-    U, S, Vt = np.linalg.svd(A)
-    H = Vt[-1].reshape(3, 3)
-    return H / H[2, 2]
-</pre>
-            </div>
-            <p>
-                This function computes the homography matrix by assembling the matrix A using the correspondences, performing SVD, and extracting the last row of V<sup>T</sup> (which corresponds to the smallest singular value). The homography matrix H is then normalized so that H[2, 2] = 1.
-            </p>
-        </div>
 
         <!-- Warping Images -->
         <div class="box">
