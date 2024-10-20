@@ -109,11 +109,11 @@
             </p>
             <div class="image-row">
                 <figure>
-                    <img src="Media/mc_1.png" alt="McDonald's Image 1">
+                    <img src="Media/mc_1.jpg" alt="McDonald's Image 1">
                     <figcaption>McDonald's Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/mc_2.png" alt="McDonald's Image 2">
+                    <img src="Media/mc_2.jpg" alt="McDonald's Image 2">
                     <figcaption>McDonald's Image 2</figcaption>
                 </figure>
             </div>
@@ -121,11 +121,11 @@
 
             <div class="image-row">
                 <figure>
-                    <img src="Media/soda_1.png" alt="Soda Hall Image 1">
+                    <img src="Media/soda_1.jpg" alt="Soda Hall Image 1">
                     <figcaption>Soda Hall Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/soda_2.png" alt="Soda Hall Image 2">
+                    <img src="Media/soda_2.jpg" alt="Soda Hall Image 2">
                     <figcaption>Soda Hall Image 2</figcaption>
                 </figure>
             </div>
@@ -133,11 +133,11 @@
 
             <div class="image-row">
                 <figure>
-                    <img src="Media/room_1.png" alt="Room Image 1">
+                    <img src="Media/room_1.jpg" alt="Room Image 1">
                     <figcaption>Room Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/room_2.png" alt="Room Image 2">
+                    <img src="Media/room_2.jpg" alt="Room Image 2">
                     <figcaption>Room Image 2</figcaption>
                 </figure>
             </div>
@@ -151,24 +151,27 @@
                 To align the images, I needed to compute the homography matrix <em>H</em> that maps points from one image to corresponding points in another. Given a set of corresponding points between two images, the goal is to find <em>H</em> such that:
             </p>
             <p class="math">
-                \( \begin{bmatrix} x' \\ y' \\ 1 \end{bmatrix} = H \begin{bmatrix} x \\ y \\ 1 \end{bmatrix} \)
+                [ x' &nbsp; y' &nbsp; 1 ]<sup>T</sup> = H * [ x &nbsp; y &nbsp; 1 ]<sup>T</sup>
             </p>
             <p>
-                Where \((x, y)\) are points in the first image, and \((x', y')\) are the corresponding points in the second image.
+                Where (x, y) are points in the first image, and (x', y') are the corresponding points in the second image.
             </p>
             <p>
                 The homography matrix <em>H</em> has 8 degrees of freedom (since it's a 3x3 matrix defined up to scale). To solve for <em>H</em>, I set up a system of linear equations using the correspondences:
             </p>
             <p class="math">
-                \[
-                \begin{cases}
-                x' = \frac{h_{11} x + h_{12} y + h_{13}}{h_{31} x + h_{32} y + h_{33}} \\
-                y' = \frac{h_{21} x + h_{22} y + h_{23}}{h_{31} x + h_{32} y + h_{33}}
-                \end{cases}
-                \]
+                x' = (h<sub>11</sub> x + h<sub>12</sub> y + h<sub>13</sub>) / (h<sub>31</sub> x + h<sub>32</sub> y + h<sub>33</sub>)<br>
+                y' = (h<sub>21</sub> x + h<sub>22</sub> y + h<sub>23</sub>) / (h<sub>31</sub> x + h<sub>32</sub> y + h<sub>33</sub>)
             </p>
             <p>
-                Multiplying both sides to eliminate denominators and rearranging, we get linear equations in terms of the elements of <em>H</em>. By stacking these equations for all correspondences, we form a system \( A \mathbf{h} = \mathbf{0} \), where \(\mathbf{h}\) is a vector of the unknowns. This system is solved using Singular Value Decomposition (SVD), where the solution corresponds to the singular vector associated with the smallest singular value.
+                Multiplying both sides to eliminate denominators and rearranging, we get linear equations in terms of the elements of <em>H</em>:
+            </p>
+            <p class="math">
+                -h<sub>11</sub> x - h<sub>12</sub> y - h<sub>13</sub> + h<sub>31</sub> x x' + h<sub>32</sub> y x' + h<sub>33</sub> x' = 0<br>
+                -h<sub>21</sub> x - h<sub>22</sub> y - h<sub>23</sub> + h<sub>31</sub> x y' + h<sub>32</sub> y y' + h<sub>33</sub> y' = 0
+            </p>
+            <p>
+                By stacking these equations for all correspondences, we form a system A * h = 0, where h is a vector containing the unknown elements of <em>H</em>. This system is homogeneous and can be solved using Singular Value Decomposition (SVD). The solution corresponds to the right singular vector associated with the smallest singular value of A.
             </p>
             <div class="code-block">
 <pre>
@@ -186,7 +189,7 @@ def computeH(im1_pts, im2_pts):
 </pre>
             </div>
             <p>
-                This function computes the homography matrix by assembling the matrix <em>A</em> using the correspondences, performing SVD, and extracting the last column of <em>V</em> (from <em>V<sup>T</sup></em>) corresponding to the smallest singular value.
+                This function computes the homography matrix by assembling the matrix A using the correspondences, performing SVD, and extracting the last row of V<sup>T</sup> (which corresponds to the smallest singular value). The homography matrix H is then normalized so that H[2, 2] = 1.
             </p>
         </div>
 
@@ -198,11 +201,11 @@ def computeH(im1_pts, im2_pts):
             </p>
             <div class="image-row">
                 <figure>
-                    <img src="Media/soda_correspondence_1.png" alt="Soda Hall Correspondences 1">
+                    <img src="Media/soda_correspondence_1.jpg" alt="Soda Hall Correspondences 1">
                     <figcaption>Soda Hall Correspondences 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/soda_correspondence_2.png" alt="Soda Hall Correspondences 2">
+                    <img src="Media/soda_correspondence_2.jpg" alt="Soda Hall Correspondences 2">
                     <figcaption>Soda Hall Correspondences 2</figcaption>
                 </figure>
             </div>
@@ -229,21 +232,21 @@ def computeH(im1_pts, im2_pts):
             </p>
             <div class="image-row">
                 <figure>
-                    <img src="Media/winter.png" alt="Original Winter Image">
+                    <img src="Media/winter.jpg" alt="Original Winter Image">
                     <figcaption>Original Winter Image</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/winter_rectified.png" alt="Rectified Winter Image">
+                    <img src="Media/winter_rectified.jpg" alt="Rectified Winter Image">
                     <figcaption>Rectified Winter Image</figcaption>
                 </figure>
             </div>
             <div class="image-row">
                 <figure>
-                    <img src="Media/gundam.png" alt="Original Gundam Image">
+                    <img src="Media/gundam.jpg" alt="Original Gundam Image">
                     <figcaption>Original Gundam Image</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/gundam_rectified.png" alt="Rectified Gundam Image">
+                    <img src="Media/gundam_rectified.jpg" alt="Rectified Gundam Image">
                     <figcaption>Rectified Gundam Image</figcaption>
                 </figure>
             </div>
@@ -260,11 +263,11 @@ def computeH(im1_pts, im2_pts):
             </p>
             <div class="image-row">
                 <figure>
-                    <img src="Media/mc_1.png" alt="McDonald's Image 1">
+                    <img src="Media/mc_1.jpg" alt="McDonald's Image 1">
                     <figcaption>McDonald's Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/mc_2.png" alt="McDonald's Image 2">
+                    <img src="Media/mc_2.jpg" alt="McDonald's Image 2">
                     <figcaption>McDonald's Image 2</figcaption>
                 </figure>
                 <figure>
@@ -274,11 +277,11 @@ def computeH(im1_pts, im2_pts):
             </div>
             <div class="image-row">
                 <figure>
-                    <img src="Media/soda_1.png" alt="Soda Hall Image 1">
+                    <img src="Media/soda_1.jpg" alt="Soda Hall Image 1">
                     <figcaption>Soda Hall Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/soda_2.png" alt="Soda Hall Image 2">
+                    <img src="Media/soda_2.jpg" alt="Soda Hall Image 2">
                     <figcaption>Soda Hall Image 2</figcaption>
                 </figure>
                 <figure>
@@ -292,7 +295,7 @@ def computeH(im1_pts, im2_pts):
                     <figcaption>Room Image 1</figcaption>
                 </figure>
                 <figure>
-                    <img src="Media/room_2.png" alt="Room Image 2">
+                    <img src="Media/room_2.jpg" alt="Room Image 2">
                     <figcaption>Room Image 2</figcaption>
                 </figure>
                 <figure>
