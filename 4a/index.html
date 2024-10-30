@@ -287,6 +287,93 @@
         </div>
     </div>
 
+    <div class="box">
+        <h2>Part 2: Automatic Image Stitching</h2>
+        <p>
+            The goal of this part was to create a system for automatically stitching images into a mosaic. Instead of manually selecting correspondences, I implemented an automated pipeline that detects features, matches them, and computes the homography robustly.
+        </p>
+        <h3>Detecting Corner Features</h3>
+        <p>
+            To detect feature points, I used the Harris Interest Point Detector. The function <code>get_harris_corners</code> computes the Harris response for each pixel and selects points where the response is above a threshold.
+        </p>
+        <figure>
+            <img src="Media/harris_corners.png" alt="Harris Corners">
+            <figcaption>Harris Corners detected in the image.</figcaption>
+        </figure>
+        <p>
+            To reduce the number of points and select the most significant corners, I implemented Adaptive Non-Maximal Suppression (ANMS). The function identifies corners that are both strong and well-distributed across the image.
+        </p>
+        <figure>
+            <img src="Media/ANMS_corners_left.png" alt="ANMS Corners">
+            <figcaption>ANMS-selected corners overlaid on the image.</figcaption>
+        </figure>
+
+        <h3>Extracting Feature Descriptors</h3>
+        <p>
+            For each selected corner, I extracted a 40x40 pixel window centered at the corner, applied a Gaussian blur, and then downsampled it to an 8x8 patch. This results in a feature descriptor that is robust to small shifts and noise. The descriptors are then bias and gain normalized.
+        </p>
+
+        <h3>Matching Feature Descriptors</h3>
+        <p>
+            To match features between images, I compared the descriptors using Euclidean distance. I applied Lowe's ratio test to ensure robust matching by selecting pairs where the ratio of the distance to the nearest neighbor and the second nearest neighbor is below a threshold.
+        </p>
+        <div class="image-row">
+            <figure>
+                <img src="Media/before_ransac_1.png" alt="Feature Matches with Low Ratio Threshold">
+                <figcaption>Feature matches with a low ratio threshold.</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/before_ransac_7.png" alt="Feature Matches with High Ratio Threshold">
+                <figcaption>Feature matches with a higher ratio threshold.</figcaption>
+            </figure>
+        </div>
+
+        <h3>Computing Homography with RANSAC</h3>
+        <p>
+            To compute a robust homography, I implemented RANSAC (Random Sample Consensus). The function iteratively selects random subsets of correspondences to compute homographies and evaluates them based on the number of inliers within a threshold distance. The best homography with the highest inlier count is selected.
+        </p>
+        <figure>
+            <img src="Media/Post_ransac.png" alt="Inlier Matches After RANSAC">
+            <figcaption>Inlier matches after applying RANSAC.</figcaption>
+        </figure>
+
+        <h3>Creating Mosaics with Automatic Stitching</h3>
+        <p>
+            Using the computed homographies from the automatic pipeline, I proceeded to create mosaics similarly to the manual approach. Below are comparisons between mosaics created with manual correspondences and those created with automatic correspondences.
+        </p>
+        <div class="image-row">
+            <figure>
+                <img src="Media/mc_mosaic.png" alt="Manual Correspondences">
+                <figcaption>Manual Correspondences</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/auto_mc_mosaic.png" alt="Automatic Correspondences">
+                <figcaption>Automatic Correspondences</figcaption>
+            </figure>
+        </div>
+        <div class="image-row">
+            <figure>
+                <img src="Media/room_mosaic.png" alt="Manual Correspondences">
+                <figcaption>Manual Correspondences</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/auto_room_mosaic.png" alt="Automatic Correspondences">
+                <figcaption>Automatic Correspondences</figcaption>
+            </figure>
+        </div>
+        <div class="image-row">
+            <figure>
+                <img src="Media/soda_mosaic.png" alt="Manual Correspondences">
+                <figcaption>Manual Correspondences</figcaption>
+            </figure>
+            <figure>
+                <img src="Media/soda_mosaic.png" alt="Automatic Correspondences">
+                <figcaption>Automatic Correspondences</figcaption>
+            </figure>
+        </div>
+    </div>
+</div>
+
     <footer>
         <p>Created by Alan Wang for CS180</p>
     </footer>
