@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 5: Image Generation and Manipulation with Diffusion Models</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        header, footer {
+            background: #004d40;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0.5em 0;
+        }
+
+        .content {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .box {
+            margin-bottom: 40px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figure {
+            margin: 10px 0;
+        }
+
+        figcaption {
+            text-align: center;
+            font-style: italic;
+            font-size: smaller;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .image-row figure {
+            flex-basis: 30%;
+            margin: 10px 1%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .image-row figure {
+                flex-basis: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        .code-block {
+            background: #f4f4f4;
+            padding: 10px;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        .math {
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .equation {
+            background: #f9f9f9;
+            padding: 10px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            border-left: 4px solid #004d40;
+            margin: 20px 0;
+        }
+
+        .equation p {
+            margin: 0;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Project 5: Image Generation and Manipulation with Diffusion Models</h1>
+    </header>
+
+    <div class="content">
+        <!-- Part 0 -->
+        <div class="box">
+            <h2>Part 0: Testing Images</h2>
+            <p>
+                We procured images just to test how things work. The images are within <strong>folder 1</strong>.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1/man_hat.png" alt="Man with Hat">
+                    <figcaption>man_hat.png</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1/oil_painting.png" alt="Oil Painting">
+                    <figcaption>oil_painting.png</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1/rocket_ship.png" alt="Rocket Ship">
+                    <figcaption>rocket_ship.png</figcaption>
+                </figure>
+            </div>
+            <p>
+                All these images were produced using a seed of 356. We experimented with different inference steps; <em>oil_painting_15.png</em> used 15 steps, and <em>rocket_ship_5.png</em> used 5 steps.
+            </p>
+        </div>
+
+        <!-- Part 1.1 -->
+        <div class="box">
+            <h2>Part 1.1: Implementing the Forward Process</h2>
+            <p>
+                A key part of diffusion is the forward process, which takes a clean image and adds noise to it. In this part, we implemented this process using the following equations:
+            </p>
+            <div class="equation">
+                <p>
+                    q(x<sub>t</sub> | x<sub>0</sub>) = N(x<sub>t</sub> ; √(ᾱ<sub>t</sub>) x<sub>0</sub>, (1 - ᾱ<sub>t</sub>) I)
+                </p>
+                <p>
+                    x<sub>t</sub> = √(ᾱ<sub>t</sub>) x<sub>0</sub> + √(1 - ᾱ<sub>t</sub>) ε, where ε ~ N(0, 1)
+                </p>
+            </div>
+            <p>
+                Given a clean image x<sub>0</sub>, we get a noisy image x<sub>t</sub> at timestep t by sampling from a Gaussian with mean √(ᾱ<sub>t</sub>) x<sub>0</sub> and variance (1 - ᾱ<sub>t</sub>). Note that the forward process not only adds noise but also scales the image.
+            </p>
+            <p>
+                We used the <code>alphas_cumprod</code> variable, which contains the ᾱ<sub>t</sub> for all t ∈ [0, 999]. Since t = 0 corresponds to a clean image and larger t corresponds to more noise, ᾱ<sub>t</sub> is close to 1 for small t and close to 0 for large t.
+            </p>
+            <p>
+                We ran the forward process on the test image with t ∈ [250, 500, 750]. Below are the results, showing progressively noisier images.
+            </p>
+            <figure>
+                <img src="media/5A/1.1/noise_levels.png" alt="Noise Levels at Different Timesteps">
+                <figcaption>Noise levels at timesteps 250, 500, and 750.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.2 -->
+        <div class="box">
+            <h2>Part 1.2: Naively Denoising with Gaussian Blur</h2>
+            <p>
+                We attempted to naively smooth out the noise by applying a Gaussian blur to the noisy images.
+            </p>
+            <figure>
+                <img src="media/5A/1.1/noise_levels.png" alt="Noisy Images">
+                <figcaption>Original noisy images (from Part 1.1).</figcaption>
+            </figure>
+            <figure>
+                <img src="media/5A/1.2/gaussian.png" alt="Gaussian Blurred Images">
+                <figcaption>Images after applying Gaussian blur.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.3 -->
+        <div class="box">
+            <h2>Part 1.3: Denoising with a Pretrained Diffusion Model</h2>
+            <p>
+                We used a pretrained diffusion model to denoise the images. The UNet model <code>stage_1.unet</code> has been trained on a large dataset of (x<sub>0</sub>, x<sub>t</sub>) pairs of images. It can recover Gaussian noise from the image, allowing us to estimate the original image by effectively reversing the noise addition process.
+            </p>
+            <figure>
+                <img src="media/5A/1.3/one_step.png" alt="Denoised Image with UNet">
+                <figcaption>Denoised image using the pretrained UNet model.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.4 -->
+        <div class="box">
+            <h2>Part 1.4: Iterative Denoising</h2>
+            <p>
+                While the UNet model performs well, it struggles with images that have higher noise levels. To improve the results, we implemented an iterative denoising process using the following equation:
+            </p>
+            <div class="equation">
+                <p>
+                    x<sub>t'</sub> = [√(ᾱ<sub>t'</sub>) β<sub>t</sub> / (1 - ᾱ<sub>t</sub>)] x<sub>0</sub> + [√(α<sub>t</sub>)(1 - ᾱ<sub>t'</sub>) / (1 - ᾱ<sub>t</sub>)] x<sub>t</sub> + v<sub>σ</sub>
+                </p>
+            </div>
+            <p>
+                Where:
+            </p>
+            <ul>
+                <li>x<sub>t</sub> is the image at timestep t</li>
+                <li>x<sub>t'</sub> is the image at timestep t' (less noisy, t' &lt; t)</li>
+                <li>α<sub>t</sub> = ᾱ<sub>t</sub> / ᾱ<sub>t'</sub></li>
+                <li>β<sub>t</sub> = 1 - α<sub>t</sub></li>
+                <li>x<sub>0</sub> is our current estimate of the clean image</li>
+            </ul>
+            <p>
+                This process allows us to skip steps and denoise more efficiently.
+            </p>
+            <figure>
+                <img src="media/5A/1.4/iterative_5.png" alt="Iterative Denoising Results">
+                <figcaption>Result after 5 iterative denoising steps.</figcaption>
+            </figure>
+            <figure>
+                <img src="media/5A/1.4/compare.png" alt="Comparison of Denoising Methods">
+                <figcaption>Comparison between one-step and iterative denoising.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.5 and 1.6 -->
+        <div class="box">
+            <h2>Part 1.5 and 1.6: Generating Images from Scratch and Classifier-Free Guidance</h2>
+            <p>
+                Using the <code>iterative_denoise</code> function, we generated images from scratch by starting with random noise and setting <code>i_start = 0</code>. This allows the model to create images based on the text prompt "a high quality photo."
+            </p>
+            <p>
+                We implemented Classifier-Free Guidance (CFG) to enhance image quality. In CFG, we compute both a noise estimate conditioned on a text prompt (ε<sub>c</sub>) and an unconditional noise estimate (ε<sub>u</sub>). We then compute:
+            </p>
+            <div class="equation">
+                <p>
+                    ε = ε<sub>u</sub> + γ (ε<sub>c</sub> - ε<sub>u</sub>)
+                </p>
+            </div>
+            <p>
+                Where γ controls the strength of CFG. Setting γ &gt; 1 leads to higher quality images by amplifying the effect of the conditioning prompt.
+            </p>
+            <figure>
+                <img src="media/5A/1.5_1.6/sampled.png" alt="Generated Images without CFG">
+                <figcaption>Images generated without CFG.</figcaption>
+            </figure>
+            <figure>
+                <img src="media/5A/1.5_1.6/sample_high.png" alt="Generated Images with CFG">
+                <figcaption>Images generated with CFG (γ &gt; 1).</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.7 -->
+        <div class="box">
+            <h2>Part 1.7: Image Editing with Diffusion Models</h2>
+            <p>
+                We explored how adding noise to a real image and then denoising it can effectively edit the image. The more noise we add, the more significant the edits. This works because the denoising process forces the noisy image back onto the manifold of natural images, allowing the model to "hallucinate" new content.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/test_image.png" alt="Original Test Image">
+                    <figcaption>Original Test Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/test_image_trans.png" alt="Transformed Test Image">
+                    <figcaption>Transformed Test Image</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/snowman_.jpg" alt="Original Snowman Image">
+                    <figcaption>Original Snowman Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/snowman_sample.png" alt="Transformed Snowman Image">
+                    <figcaption>Transformed Snowman Image</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/winter.jpg" alt="Original Winter Image">
+                    <figcaption>Original Winter Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/winter_sample.png" alt="Transformed Winter Image">
+                    <figcaption>Transformed Winter Image</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 1.7.1 -->
+        <div class="box">
+            <h3>Part 1.7.1: Applying Edits to Web and Hand-Drawn Images</h3>
+            <p>
+                We applied these editing techniques to images downloaded from the web and hand-drawn images.
+            </p>
+            <h4>Web Image:</h4>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/pepe_sad.png" alt="Original Pepe Image">
+                    <figcaption>Original Pepe Image</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/pepe_sample.png" alt="Transformed Pepe Image">
+                    <figcaption>Transformed Pepe Image</figcaption>
+                </figure>
+            </div>
+            <h4>Hand-Drawn Images:</h4>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/amogus.png" alt="Original Amogus Drawing">
+                    <figcaption>Original Amogus Drawing</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/amogus_sample.png" alt="Transformed Amogus Image">
+                    <figcaption>Transformed Amogus Image</figcaption>
+                </figure>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/dino.png" alt="Original Dino Drawing">
+                    <figcaption>Original Dino Drawing</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/1.7.1/dino_sample.png" alt="Transformed Dino Image">
+                    <figcaption>Transformed Dino Image</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 1.7.2 -->
+        <div class="box">
+            <h3>Part 1.7.2: Inpainting with Diffusion Models</h3>
+            <p>
+                We implemented inpainting using the RePaint approach. Given an image x<sub>orig</sub> and a binary mask m, we created a new image that preserves the original content where m = 0 and generates new content where m = 1. At each denoising step, we updated x<sub>t</sub> as:
+            </p>
+            <div class="equation">
+                <p>
+                    x<sub>t</sub> ← m x<sub>t</sub> + (1 - m) forward(x<sub>orig</sub>, t)
+                </p>
+            </div>
+            <p>
+                This ensures that regions outside the mask remain unchanged while the model inpaints the masked areas.
+            </p>
+            <figure>
+                <img src="media/5A/1.7/1.7.2/mask.png" alt="Inpainting Mask">
+                <figcaption>Mask used for inpainting.</figcaption>
+            </figure>
+            <figure>
+                <img src="media/5A/1.7/1.7.2/result.png" alt="Inpainting Result">
+                <figcaption>Result after inpainting.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 1.7.3 -->
+        <div class="box">
+            <h3>Part 1.7.3: Text-Conditioned Image-to-Image Translation</h3>
+            <p>
+                We performed image-to-image translation guided by text prompts. By changing the prompt from "a high quality photo" to specific descriptions, we manipulated the image content in a controlled manner.
+            </p>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.7/1.7.3/ship_to_campanile.png" alt="Ship to Campanile">
+                    <figcaption>Transformation from ship to campanile.</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/1.7.3/village_to_snowman.png" alt="Village to Snowman">
+                    <figcaption>Transformation from village to snowman.</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.7/1.7.3/dog_to_winter.png" alt="Dog to Winter Scene">
+                    <figcaption>Transformation from dog to winter scene.</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 1.8 -->
+        <div class="box">
+            <h2>Part 1.8: Creating Visual Anagrams</h2>
+            <p>
+                We implemented Visual Anagrams to create optical illusions with diffusion models. For example, we created an image that looks like "an oil painting of an old man," but when flipped upside down reveals "an oil painting of people around a campfire."
+            </p>
+            <p>
+                We achieved this by denoising an image x<sub>t</sub> with two different prompts, flipping one of the noise estimates, and averaging them:
+            </p>
+            <div class="equation">
+                <p>
+                    ε<sub>1</sub> = UNet(x<sub>t</sub>, t, p<sub>1</sub>)
+                </p>
+                <p>
+                    ε<sub>2</sub> = flip(UNet(flip(x<sub>t</sub>), t, p<sub>2</sub>))
+                </p>
+                <p>
+                    ε = (ε<sub>1</sub> + ε<sub>2</sub>) / 2
+                </p>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.8/man_campfire.png" alt="Old Man / Campfire">
+                    <figcaption>"An oil painting of an old man" / "people around a campfire"</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.8/skull_village.png" alt="Skull / Village">
+                    <figcaption>"A skull" / "a village landscape"</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.8/barista_dog.png" alt="Barista / Dog">
+                    <figcaption>"A barista" / "a dog"</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <!-- Part 1.9 -->
+        <div class="box">
+            <h2>Part 1.9: Creating Hybrid Images with Factorized Diffusion</h2>
+            <p>
+                We implemented Factorized Diffusion to create hybrid images, combining elements from two different prompts. We merged low frequencies from one noise estimate with high frequencies from another:
+            </p>
+            <div class="equation">
+                <p>
+                    ε<sub>1</sub> = UNet(x<sub>t</sub>, t, p<sub>1</sub>)
+                </p>
+                <p>
+                    ε<sub>2</sub> = UNet(x<sub>t</sub>, t, p<sub>2</sub>)
+                </p>
+                <p>
+                    ε = lowpass(ε<sub>1</sub>) + highpass(ε<sub>2</sub>)
+                </p>
+            </div>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5A/1.9/dog_man.png" alt="Dog / Man Hybrid">
+                    <figcaption>Hybrid of "a dog" and "a man."</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.9/rocket_fire.png" alt="Rocket / Fire Hybrid">
+                    <figcaption>Hybrid of "a rocket ship" and "fire."</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5A/1.9/skull_waterfall.png" alt="Skull / Waterfall Hybrid">
+                    <figcaption>Hybrid of "a skull" and "a waterfall."</figcaption>
+                </figure>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Created by Alan Wang for CS180</p>
+    </footer>
+</body>
+</html>
