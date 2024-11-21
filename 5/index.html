@@ -448,6 +448,107 @@
             </div>
         </div>
 
+
+        <!-- Project 5B -->
+        <div class="box">
+            <h2>Project 5B</h2>
+        </div>
+
+        <!-- Part 1 -->
+        <div class="box">
+            <h2>Part 1: Training a Single-Step Denoising U-Net</h2>
+            <p>
+                In this part of the project, we trained a U-Net to denoise a noisy MNIST digit. To create the training dataset, we added noise to the MNIST images. Here are some examples of varying noise levels:
+            </p>
+            <figure>
+                <img src="media/5B/noise_levels.png" alt="Noise Levels on MNIST Digits">
+                <figcaption>Varying noise levels on MNIST digits.</figcaption>
+            </figure>
+            <p>
+                Here is our training loss over epochs:
+            </p>
+            <figure>
+                <img src="media/5B/loss_graph.png" alt="Training Loss Graph">
+                <figcaption>Training loss over epochs.</figcaption>
+            </figure>
+            <p>
+                Here are sample results after the first epoch:
+            </p>
+            <figure>
+                <img src="media/5B/epoch_1.png" alt="Sample Results after Epoch 1">
+                <figcaption>Sample results after the first epoch.</figcaption>
+            </figure>
+            <p>
+                And here are sample results after the fifth epoch:
+            </p>
+            <figure>
+                <img src="media/5B/epoch_5.png" alt="Sample Results after Epoch 5">
+                <figcaption>Sample results after the fifth epoch.</figcaption>
+            </figure>
+            <p>
+                We also ran the model on varying sigma values to observe its performance:
+            </p>
+            <figure>
+                <img src="media/5B/sigmas.png" alt="Model Performance on Varying Sigmas">
+                <figcaption>Model performance on varying sigma values.</figcaption>
+            </figure>
+        </div>
+
+        <!-- Part 2 -->
+        <div class="box">
+            <h2>Part 2: Training a Diffusion Model</h2>
+            <h3>Adding Time-Conditioning</h3>
+            <p>
+                We modified our U-Net to predict the noise of an image instead of performing the denoising itself. This approach allows for iterative denoising, which works better than one-step denoising. By adding conditioning on the timestep of the diffusion process, the model understands which step we are at in the iterative denoising process.
+            </p>
+            <p>
+                To train the model, we took a batch of random images, added noise to each image with a random timestep value from 0 to 299 using the first equation from Part A (0 being no noise and 299 being pure noise), ran the model on the noisy images to get the predicted noise, and then calculated the loss between the predicted noise and the actual noise added.
+            </p>
+            <p>
+                To sample from the model, we ran the iterative denoising algorithm from Part A. Starting from an image of pure noise, we iteratively moved towards the clean image. Since the model was trained equally on all noise levels, it should properly denoise the image after sufficient training. Here is our training loss graph:
+            </p>
+            <figure>
+                <img src="media/5B/time_loss_graph.png" alt="Time-Conditioned Training Loss Graph">
+                <figcaption>Training loss over epochs for time-conditioned U-Net.</figcaption>
+            </figure>
+            <p>
+                Here are the sample results after the fifth epoch:
+            </p>
+            <figure>
+                <img src="media/5B/time_epoch_5.png" alt="Time-Conditioned U-Net Results after Epoch 5">
+                <figcaption>Time-Conditioned U-Net Epoch 5 Results.</figcaption>
+            </figure>
+            <p>
+                And here are the sample results after the twentieth epoch:
+            </p>
+            <figure>
+                <img src="media/5B/time_epoch_20.png" alt="Time-Conditioned U-Net Results after Epoch 20">
+                <figcaption>Time-Conditioned U-Net Epoch 20 Results.</figcaption>
+            </figure>
+
+            <h3>Adding Class-Conditioning</h3>
+            <p>
+                In the previous section, the model struggled to generate distinct digits because it lacked the ability to distinguish between different numbers, often producing amalgamations. To address this, we added class-conditioning to our U-Net, providing the specific digit label to guide the generation process.
+            </p>
+            <p>
+                The training algorithm remained largely the same, but we included the MNIST labels as a "class" vector input to the U-Net. When sampling, we passed in the class vector corresponding to the desired digit. Here are some results from training the class-conditioned U-Net.
+            </p>
+            <figure>
+                <img src="media/5B/epoch_loss_graph.png" alt="Class-Conditioned Training Loss Graph">
+                <figcaption>Training loss over epochs for class-conditioned U-Net.</figcaption>
+            </figure>
+            <div class="image-row">
+                <figure>
+                    <img src="media/5B/class_epoch_5.png" alt="Class-Conditioned U-Net Results after Epoch 5">
+                    <figcaption>Epoch 5 Results</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/5B/class_epoch_20.png" alt="Class-Conditioned U-Net Results after Epoch 20">
+                    <figcaption>Epoch 20 Results</figcaption>
+                </figure>
+            </div>
+        </div>
+
     </div>
 
     <footer>
