@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project: Light Field Camera and Gradient Domain Fusion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        header, footer {
+            background: #004d40;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0.5em 0;
+        }
+
+        .content {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .box {
+            margin-bottom: 40px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        figure {
+            margin: 10px 0;
+        }
+
+        figcaption {
+            text-align: center;
+            font-style: italic;
+            font-size: smaller;
+        }
+
+        .image-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .image-row figure {
+            flex-basis: 45%;
+            margin: 10px 1%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .image-row figure {
+                flex-basis: 100%;
+                margin: 10px 0;
+            }
+        }
+
+        .equation {
+            background: #f9f9f9;
+            padding: 10px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16px;
+            border-left: 4px solid #004d40;
+            margin: 20px 0;
+        }
+
+        .equation p {
+            margin: 0;
+            text-align: center;
+        }
+
+        .gif-container {
+            position: relative;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .gif-container button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #004d40;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .gif-container button:hover {
+            background-color: #00695c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Light Field Camera & Gradient Domain Fusion</h1>
+    </header>
+
+    <div class="content">
+        <!-- Light Field Camera -->
+        <div class="box">
+            <h2>Light Field Camera</h2>
+
+            <!-- Motivation -->
+            <div class="box">
+                <h3>Motivation</h3>
+                <p>
+                    We found that capturing a large set of images over a plane perpendicular to the optical axis enables complex post-capture refocusing effects. We aim to reproduce these effects by simply shifting and averaging multiple sub-aperture images from a light field dataset.
+                </p>
+            </div>
+
+            <!-- Depth Refocusing -->
+            <div class="box">
+                <h3>Depth Refocusing</h3>
+                <p>
+                    When capturing a light field, we take photos from multiple viewpoints without changing the optical axis. Objects closer to the camera show significant positional shifts across these images, while distant objects remain relatively still. Averaging all images as-is will emphasize distant objects (in focus) and blur nearer objects. By shifting each sub-aperture image toward a central view before averaging, we can "refocus" the scene at different depths. Varying this shift parameter (C) changes the focal plane of the resulting image.
+                </p>
+                <p>
+                    Below are examples showing depth refocusing for various C values. Each sequence transitions from C = -3 to C = 3 in increments of 0.3, illustrating how the focus plane moves through the scene.
+                </p>
+                <div class="image-row">
+                    <figure>
+                        <div class="gif-container">
+                            <img id="chessRefocusGif" src="media/chess_refocus.gif" alt="Chess Refocus Animation">
+                            <button onclick="restartGif('chessRefocusGif')">Restart Animation</button>
+                        </div>
+                        <figcaption>Chess Light Field Refocusing (C in [-3, 3], step=0.3)</figcaption>
+                    </figure>
+                    <figure>
+                        <div class="gif-container">
+                            <img id="legoRefocusGif" src="media/lego_refocus.gif" alt="Lego Refocus Animation">
+                            <button onclick="restartGif('legoRefocusGif')">Restart Animation</button>
+                        </div>
+                        <figcaption>Lego Light Field Refocusing (C in [-3, 3], step=0.3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <!-- Aperture Adjustment -->
+            <div class="box">
+                <h3>Aperture Adjustment</h3>
+                <p>
+                    By averaging a subset of the images around the central viewpoint, we can simulate changing the aperture size. Using fewer images corresponds to a smaller aperture, yielding a sharper overall image, while using more images simulates a larger aperture that narrows the depth of field.
+                </p>
+                <p>
+                    Below are examples showing aperture adjustments as we vary the number of sub-aperture images included (from 0 up to 50). For the chess dataset, we used C=0.4; for the lego dataset, we used C=0.3.
+                </p>
+                <div class="image-row">
+                    <figure>
+                        <div class="gif-container">
+                            <img id="chessApertureGif" src="media/chess_aperture.gif" alt="Chess Aperture Adjustment">
+                            <button onclick="restartGif('chessApertureGif')">Restart Animation</button>
+                        </div>
+                        <figcaption>Chess Aperture Variation (aperture in [0,50], C=0.4)</figcaption>
+                    </figure>
+                    <figure>
+                        <div class="gif-container">
+                            <img id="legoApertureGif" src="media/lego_aperture.gif" alt="Lego Aperture Adjustment">
+                            <button onclick="restartGif('legoApertureGif')">Restart Animation</button>
+                        </div>
+                        <figcaption>Lego Aperture Variation (aperture in [0,50], C=0.3)</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="box">
+                <h3>Summary</h3>
+                <p>
+                    Through simple operations like shifting and averaging a grid of images, we recreated the key optical properties of a light field camera: refocusing at different depths and simulating various aperture sizes. This demonstrates that the light field data structure holds rich information that can be leveraged for post-capture manipulations without complex, computationally expensive algorithms.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Gradient Domain Fusion -->
+        <div class="box">
+            <h2>Gradient Domain Fusion</h2>
+
+            <!-- Motivation -->
+            <div class="box">
+                <h3>Motivation</h3>
+                <p>
+                    In Project 2, we blended images using Laplacian and Gaussian pyramids but struggled to create perfect masks. To overcome this, we explore Poisson Blending, which focuses on gradients and naturally integrates source content into the target image without relying on carefully crafted masks.
+                </p>
+            </div>
+
+            <!-- 2.1 Toy Problem -->
+            <div class="box">
+                <h3>2.1 Toy Problem</h3>
+                <p>
+                    Before implementing Poisson Blending, we first solve a simpler problem: reconstructing an image from its gradients and a single pixel constraint. We represent the image as a vector and formulate a system of equations Av = b, where A encodes the gradient constraints (both x and y directions) and one intensity constraint. By solving this system, we recreate an image nearly identical to the original.
+                </p>
+                <p>
+                    Below are the original toy image and the reconstructed version. The maximum error between them is very small, demonstrating that our gradient-based system can accurately reconstruct the image.
+                </p>
+                <div class="image-row">
+                    <figure>
+                        <img src="media/toy_problem.png" alt="Original Toy Problem Image">
+                        <figcaption>Original Toy Problem Image</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="media/toy_problem_generate.png" alt="Reconstructed Toy Problem Image">
+                        <figcaption>Reconstructed Toy Problem Image (Max error ≈ 0.0010002)</figcaption>
+                    </figure>
+                </div>
+            </div>
+
+            <!-- Poisson Blending -->
+            <div class="box">
+                <h3>Poisson Blending</h3>
+                <p>
+                    Building on the toy problem, we now set up a similar system of equations for blending a source image into a target image. Poisson Blending focuses on preserving the source gradients inside the defined mask region while ensuring that pixels at the boundary align smoothly with the target image. By solving Av = b for each color channel, we seamlessly integrate the source content into the target background.
+                </p>
+            </div>
+
+            <!-- Mixed Gradients -->
+            <div class="box">
+                <h3>Mixed Gradients</h3>
+                <p>
+                    Mixed Gradient blending extends Poisson Blending by choosing gradients from either the source or the target image based on which has a larger magnitude, often producing visually appealing composites even when source and target images differ significantly in texture and intensity.
+                </p>
+
+            <!-- Example Results -->
+            <div class="image-row">
+                <figure>
+                    <img src="media/penguin_all.png" alt="Penguin Gradient Domain Fusion">
+                    <figcaption>A cute little penguin found its way!</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/aespa_me.png" alt="Aespa Gradient Domain Fusion">
+                    <figcaption>I finally made it</figcaption>
+                </figure>
+                <figure>
+                    <img src="media/slowpoke_simi.png" alt="Slowpoke Gradient Domain Fusion">
+                    <figcaption>hehe</figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Created by Alan Wang</p>
+    </footer>
+
+    <script>
+        function restartGif(id) {
+            var gif = document.getElementById(id);
+            gif.src = gif.src.split('?')[0] + '?' + new Date().getTime();
+        }
+    </script>
+</body>
+</html>
